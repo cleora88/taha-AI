@@ -1,3 +1,34 @@
+# Windows Quick Start (Updated)
+
+Backend on `8081`, Frontend on `3002`.
+
+```pwsh
+cd "C:\Users\User\Downloads\taha AI"
+python -m venv .venv
+& ".\.venv\Scripts\Activate.ps1"
+pip install -r requirements.txt
+python -m uvicorn app:app --port 8081
+```
+
+In a second terminal:
+
+```pwsh
+cd "C:\Users\User\Downloads\taha AI\frontend"
+$env:PORT=3002
+npm install
+npm start
+```
+
+Optional `.env` in project root:
+
+```
+OPENAI_API_KEY=your-key-here
+```
+
+Notes:
+- Vector DB: FAISS (local). Embeddings: OpenAI → TF‑IDF fallback.
+- Frontend proxy points to `http://localhost:8081` in `frontend/package.json`.
+
 # 🔬 Intelligent Research Assistant
 
 An AI-powered application that allows users to upload research papers, store them in a vector database, and chat with them using natural language. Built with FastAPI, React, OpenAI, and Pinecone.
