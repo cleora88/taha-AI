@@ -1,0 +1,97 @@
+import React, { useState, useEffect } from 'react';
+import './App.css';
+import DocumentUpload from './components/DocumentUpload';
+import DocumentList from './components/DocumentList';
+import ChatInterface from './components/ChatInterface';
+
+function App() {
+  const [documents, setDocuments] = useState([]);
+  const [activeView, setActiveView] = useState('chat'); // 'chat' or 'documents'
+  const [loading, setLoading] = useState(false);
+
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+
+  // Fetch documents on mount
+  useEffect(() => {
+    fetchDocuments();
+  }, []);
+
+  const fetchDocuments = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/documents/`);
+      const data = await response.json();
+      setDocuments(data.documents || []);
+    } catch (error) {
+      console.error('Error fetching documents:', error);
+    }
+  };
+
+  const handleDocumentUploaded = () => {
+    fetchDocuments();
+  };
+
+  const handleDocumentDeleted = () => {
+    fetchDocuments();
+  };
+
+  return (
+    <div className="app">
+      <header className="app-header">
+        <div className="header-content">
+          <h1>🔬 Research Assistant</h1>
+          <p className="subtitle">Upload papers, ask questions, get insights</p>
+        </div>
+        <nav className="nav-tabs">
+          <button 
+            className={activeView === 'chat' ? 'active' : ''}
+            onClick={() => setActiveView('chat')}
+          >
+            💬 Chat
+          </button>
+          <button 
+            className={activeView === 'documents' ? 'active' : ''}
+            onClick={() => setActiveView('documents')}
+          >
+            📚 Documents ({documents.length})
+          </button>
+        </nav>
+      </header>
+
+      <main className="app-main">
+        {activeView === 'chat' ? (
+          <div className="chat-view">
+            {documents.length === 0 ? (
+              <div className="empty-state">
+                <div className="empty-icon">📄</div>
+                <h2>No documents uploaded yet</h2>
+                <p>Upload your first research paper to get started!</p>
+                <button 
+                  className="btn-primary"
+                  onClick={() => setActiveView('documents')}
+                >
+                  Upload Document
+                </button>
+              </div>
+            ) : (
+              <ChatInterface apiUrl={API_URL} documents={documents} />
+            )}
+          </div>
+        ) : (
+          <div className="documents-view">
+            <DocumentUpload 
+              apiUrl={API_URL}
+              onDocumentUploaded={handleDocumentUploaded}
+            />
+            <DocumentList 
+              documents={documents}
+              apiUrl={API_URL}
+              onDocumentDeleted={handleDocumentDeleted}
+            />
+          </div>
+        )}
+      </main>
+    </div>
+  );
+}
+
+export default App;
