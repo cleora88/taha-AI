@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.venv/
+venv/
+
+# Environment files
+.env
+.env.*
+
+# FAISS index and cache
+faiss_storage.index
+faiss_storage.pkl
+
+# Logs and temp
+*.log
+*.tmp
+temp/
+
+# Node/React frontend
+frontend/node_modules/
+frontend/.cache/
+frontend/build/
+frontend/.env
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+
+# IDE/editor
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Downloads and transient files
+Non confirmé 844993.crdownload
